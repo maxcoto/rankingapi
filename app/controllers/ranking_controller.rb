@@ -4,10 +4,12 @@ class RankingController < ApplicationController
   end
 
   def set
-    r = Ranking.find_or_create(uuid: params[:uuid])
-    r.name = params[:name]
-    r.points = params[:points].to_f
-    r.save!
+    if(params[:uuid])
+      r = Ranking.find_or_create_by(uuid: params[:uuid])
+      r.name = params[:name]
+      r.points = params[:points].to_f
+      r.save!
+    end
     
     render json: { success: true }
   end
