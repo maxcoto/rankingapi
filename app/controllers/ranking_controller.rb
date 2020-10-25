@@ -1,14 +1,21 @@
 class RankingController < ApplicationController
   def get
-    render json: { success: true, ranking: Ranking.all.to_a }
+    ranking = Ranking.all.order(:points, :desc)
+    render json: { success: true, ranking: ranking }
   end
 
   def set
-    if(params[:uuid])
-      r = Ranking.find_or_create_by(uuid: params[:uuid])
-      r.name = params[:name]
-      r.points = params[:points].to_f
-      r.save!
+    uuid = params[:uuid]
+    if(uuid)
+      points = params[:points].to_f
+      if(points > 0)
+        r = Ranking.find_or_create_by(uuid: uuid)
+        if(r.points.nil? || points < r.points)
+          r.name = params[:name]
+          r.points = points
+          r.save!
+        end
+      end
     end
     
     render json: { success: true }
