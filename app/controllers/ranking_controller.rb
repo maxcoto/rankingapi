@@ -1,6 +1,6 @@
 class RankingController < ApplicationController
   def get
-    ranking = Ranking.all.order(points: :desc)
+    ranking = Ranking.all.order(points: :asc)
     render json: { success: true, ranking: ranking }
   end
 
